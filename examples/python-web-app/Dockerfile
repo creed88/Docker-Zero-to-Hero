@@ -24,7 +24,7 @@ WORKDIR /app
 
 # Install necessary packages and Python
 RUN apt update && \
-    apt install -y python3 python3-pip python3-venv && \
+    apt install -y python3 python3-pipx python3-venv && \
     apt clean && rm -rf /var/lib/apt/lists/*  # Clean up
 
 # Copy the requirements file and the devops directory into the container
@@ -32,7 +32,7 @@ COPY requirements.txt /app
 COPY devops /app
 
 # Install the Python packages from requirements.txt
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN pipx install --no-cache-dir -r requirements.txt
 
 # Set the entry point to use Python
 ENTRYPOINT ["python3"]
