@@ -15,6 +15,7 @@
 
 # Use Ubuntu as the base image
 # Use Ubuntu as the base image
+# Use Ubuntu as the base image
 FROM ubuntu
 
 # Set the working directory
@@ -28,17 +29,21 @@ COPY devops /app
 RUN apt update && \
     apt install -y python3 python3-pip && \
     pip3 install --no-cache-dir -r requirements.txt && \
-    pip install --user pipx && \  # Install pipx for the current user
-    mkdir -p /root/.local/bin && \ # Create the directory for pipx binaries
-    PATH=/root/.local/bin:$PATH && \  # Add pipx binaries to the PATH
-    pipx install -r requirements.txt && \         # Install your package using pipx
+    apt install -y python3-venv && \  # Install python3-venv for virtual environment support
+    python3 -m venv venv && \         # Create a virtual environment
+    . venv/bin/activate && \           # Activate the virtual environment
+    pip install --no-cache-dir -r requirements.txt && \  # Install packages within the venv
+    pip install pipx && \              # Install pipx
+    pipx ensurepath && \               # Ensure pipx is in PATH
+    pipx install requirements.txt && \           # Install your package using pipx
     cd devops
 
-# Set the entry point to use the installed Python
-ENTRYPOINT ["python3"]
+# Set the entry point to use the virtual environment's Python
+ENTRYPOINT ["./venv/bin/python3"]
 
 # Command to run the application
 CMD ["manage.py", "runserver", "0.0.0.0:8000"]
+
 
 
 
