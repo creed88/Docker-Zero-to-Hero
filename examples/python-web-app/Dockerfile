@@ -14,6 +14,7 @@
 # CMD ["manage.py", "runserver", "0.0.0.0:8000"]
 
 # Use Ubuntu as the base image
+# Use Ubuntu as the base image
 FROM ubuntu
 
 # Set the working directory
@@ -27,15 +28,18 @@ COPY devops /app
 RUN apt update && \
     apt install -y python3 python3-pip && \
     pip3 install --no-cache-dir -r requirements.txt && \
-    pip install pipx && \              # Install pipx globally if needed
-    pipx ensurepath && \               # Ensure pipx is in PATH if you're going to use it
-    pipx install your_package           # Install your package using pipx if needed
+    pip install --user pipx && \  # Install pipx for the current user
+    mkdir -p /root/.local/bin && \ # Create the directory for pipx binaries
+    PATH=/root/.local/bin:$PATH && \  # Add pipx binaries to the PATH
+    pipx install -r requirements.txt && \         # Install your package using pipx
+    cd devops
 
 # Set the entry point to use the installed Python
 ENTRYPOINT ["python3"]
 
 # Command to run the application
 CMD ["manage.py", "runserver", "0.0.0.0:8000"]
+
 
 
 
