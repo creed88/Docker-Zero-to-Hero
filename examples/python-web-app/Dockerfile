@@ -1,4 +1,4 @@
-FROM ubuntu
+# FROM ubuntu
 
 # WORKDIR /app
 
@@ -23,6 +23,7 @@ COPY devops /app
 
 RUN apt update && \
     apt install -y python3 python3-pipx && \
+    pipx ensurepath
     pipx install -r requirements.txt && \
     cd devops
 
