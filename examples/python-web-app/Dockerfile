@@ -15,6 +15,7 @@
 
 
 # Use Ubuntu as the base image
+# Use Ubuntu as the base image
 FROM ubuntu:latest
 
 # Set the working directory
@@ -26,14 +27,15 @@ COPY devops /app
 
 # Install necessary packages
 RUN apt update && \
-    apt install -y python3 python3-pip python3-pipx && \
+    apt install -y python3 python3-pip && \
     apt clean && rm -rf /var/lib/apt/lists/*  # Clean up
+
+# Install pipx using pip
+RUN pip3 install --no-cache-dir pipx && \
+    pipx ensurepath
 
 # Install the Python packages from requirements.txt using pip
 RUN pip3 install --no-cache-dir -r requirements.txt
-
-# Ensure pipx is in PATH
-RUN pipx ensurepath
 
 # Set the entry point to use Python
 ENTRYPOINT ["python3"]
