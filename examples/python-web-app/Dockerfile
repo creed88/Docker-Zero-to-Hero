@@ -1,4 +1,4 @@
-# FROM ubuntu
+FROM ubuntu
 
 # WORKDIR /app
 
@@ -13,30 +13,18 @@
 # ENTRYPOINT ["python3"]
 # CMD ["manage.py", "runserver", "0.0.0.0:8000"]
 
-# Use Ubuntu as the base image
-# Use Ubuntu as the base image
-# Use Ubuntu as the base image
-# Use Ubuntu as the base image
-# Use Ubuntu as the base image
-FROM ubuntu:latest
 
-# Set the working directory
+FROM ubuntu
+
 WORKDIR /app
 
-# Install necessary packages and Python
-RUN apt update && \
-    apt install -y python3-full python3-pip && \
-    apt clean && rm -rf /var/lib/apt/lists/*  # Clean up
-
-# Copy the requirements file and the devops directory into the container
 COPY requirements.txt /app
 COPY devops /app
 
-# Install the Python packages from requirements.txt
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN apt update && \
+    apt install -y python3 python3-pipx && \
+    pipx install -r requirements.txt && \
+    cd devops
 
-# Set the entry point to use Python
 ENTRYPOINT ["python3"]
-
-# Command to run the application
 CMD ["manage.py", "runserver", "0.0.0.0:8000"]
